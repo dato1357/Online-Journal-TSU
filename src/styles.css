@@ -1,1 +1,115 @@
-/* You can add global styles to this file, and also import other style files */
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,800,700,600,300);
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+/* entypo */
+[class*="entypo-"]:before {
+  font-family: 'entypo', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+}
+a {
+  color:white;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 50px;
+  height: 100%;
+  background-color: #222;
+  color: #fff;
+  overflow: hidden;
+  transition: width .3s ease-in-out;
+  box-shadow: 0 0 10px #000;
+  z-index: 100;
+}
+.sidebar:hover {
+  width: 200px;
+}
+.sidebar:hover .main-nav ul li a {
+  opacity: 1;
+  left: 0;
+  transition-delay: .2s;
+}
+.sidebar .main-nav ul li {
+  min-height: 50px;
+  line-height: 50px;
+  position: relative;
+  border-bottom: 1px solid #333;
+  transition: all .3s ease-in-out;
+}
+.sidebar .main-nav ul li.logo {
+  margin-bottom: 50px;
+}
+.sidebar .main-nav ul li.logo a {
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.sidebar .main-nav ul li.logo span:before {
+  color: #ea4c89;
+  font-size: 1.5em;
+}
+.sidebar .main-nav ul li.logo + li {
+  border-top: 1px solid #333;
+}
+.sidebar .main-nav ul li a {
+  display: block;
+  padding-left: 50px;
+  position: relative;
+  left: 15px;
+  opacity: 0;
+  transition: all .3s ease-in-out;
+  transition-delay: 0s;
+  cursor: pointer;
+  font-weight: 300;
+}
+.sidebar .main-nav ul li span {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  top: 0;
+  left: 0;
+  text-align: center;
+}
+.sidebar .main-nav ul li span:before {
+  font-size: 1.25em;
+  transition: all .3s ease-in-out;
+}
+.sidebar .main-nav ul li:hover {
+  background-color: #111;
+}
+.sidebar .main-nav ul li:hover span:before {
+  color: #ea4c89;
+}
+
+.page {
+  position: relative;
+  padding-left: 50px;
+}
+.page.color-1 {
+  background-color: #3498db;
+  color: #fff;
+}
+.page .content {
+  width: 100%;
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 50px 20px;
+}
+.page .content h1, .page .content h2, .page .content p {
+  margin-bottom: 1em;
+}

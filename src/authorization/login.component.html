@@ -1,0 +1,10 @@
+<form>
+<div class="main-form">
+  <i class="logo"></i>
+  <input type="text" placeholder="მომხმარებლის სახელი" name="username" [(ngModel)]="user.Username" value="">
+  <input type="password" placeholder="პაროლი" value="" name="password" [(ngModel)]="user.Password" >
+  <button type="submit" class="btn btn-success pull-right" value="Sign in" (click)="login()">შესვლა</button>
+  <div>
+  </div>
+</div>
+</form>

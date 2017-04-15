@@ -1,3 +1,31 @@
-<h1>
-  {{title}}
-</h1>
+<aside class='sidebar'>
+  <div class='main-nav'>
+    <ul>
+      <li class='logo'>
+        <a [routerLink]="['']"><img style="height:40px; width:50px; margin-left:-5px;" src="https://www.tsu.ge/i/tsu-logo.png"></a>
+      </li>
+      <li>
+        <a [routerLink]="['']">მთავარი</a>
+        <span class='entypo-home'></span>
+      </li>
+      <li>
+        <a [routerLink]="['register']">რეგისტრაცია</a>
+        <span class='entypo-gauge'></span>
+      </li>
+      <li>
+        <a [routerLink]="['login']">შესვლა</a>
+        <span class='entypo-chart-line'></span>
+      </li>
+      <li>
+        <a [routerLink]="['journals-and-books']">ჟურნალი</a>
+        <span class='entypo-rocket'></span>
+      </li>
+      <li>
+        <a>ავტორები</a>
+        <span class='entypo-vcard'></span>
+      </li>
+    
+    </ul>
+  </div>
+</aside>
+<router-outlet></router-outlet>
