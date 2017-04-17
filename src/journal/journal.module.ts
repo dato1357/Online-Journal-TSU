@@ -12,6 +12,7 @@ import {RegisterUserComponent} from '../journal/register/register-user.component
 import {JournalsComponent} from '../journal/journals.list/journals.list.component';
 import {JournalDetailsComponent} from '../journal/journal.details/journal.details.component';
 import {JournalService} from '../journal/journal.services/journal.service';
+import {SubmissionComponent} from '../journal/submission/submission.component';
 
 @NgModule({
   imports: [
@@ -27,7 +28,7 @@ import {JournalService} from '../journal/journal.services/journal.service';
     RegisterUserComponent,
     JournalsComponent,
     JournalDetailsComponent,
-    
+    SubmissionComponent
   ],
   providers: [
     HttpService,

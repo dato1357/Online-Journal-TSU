@@ -205,8 +205,8 @@ div.container {
 .product-description-section .product-detail-wrapper .price-section .sale-label {
   position: absolute;
   padding: 10px 15px;
-  height: 100%;
-  width: 75px;
+  height: 55px;
+  width: 175px;
   line-height: 150%;
   display: none;
   text-align: center;

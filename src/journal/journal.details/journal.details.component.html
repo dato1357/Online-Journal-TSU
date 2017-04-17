@@ -14,7 +14,7 @@
 
               <div class="row col-lg-12 col-md-12">
                 <div class="row">
-                  <button class="btn btn-lg btn-info col-lg-12 col-md-12" style="margin-top:20px; color:aliceblue"><i class="" ></i> სტატიის გამოქვეყნება</button>
+                  <a [routerLink]="[journal.Id]"class="btn btn-lg btn-info col-lg-12 col-md-12" style="margin-top:20px; color:aliceblue"><i class="" ></i> სტატიის გამოქვეყნება</a>
                 </div>
                 <div class="row">
                   <button class="btn btn-lg btn-info col-lg-12 col-md-12" style="margin-top:20px;"><i class="s"></i> სტატიების ნახვა</button>
@@ -48,12 +48,7 @@
               <div class="rate-point"><strong>4.5 </strong><span>(403 votes)</span></div>
               <div class="order-count"><strong>3472 </strong><span>orders</span></div>
             </div>
-            <div class="price-section has-safe form-group">
-              
-              <div class="sale-label">ფასი</div>
-              <div class="price-div"><strong class="price">$146.35</strong><span>Old price: $186.35</span></div>
-              <div class="clearfix"></div>
-            </div>
+            
             <div class="description">
               <div class="left-col">
                 <h4 style="color:green; text-align:center;">აღწერა</h4>
@@ -62,6 +57,11 @@
                 </ul>
               </div>
               <div class="right-col"></div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="price-section has-safe form-group">
+              
+              <div class="sale-label">განხილვები</div>
               <div class="clearfix"></div>
             </div>
 
