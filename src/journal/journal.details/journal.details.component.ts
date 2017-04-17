@@ -11,9 +11,14 @@ import {ActivatedRoute} from '@angular/router'
 export class JournalDetailsComponent implements OnInit {
  journal : Journal;
  id : number;
+ hide = true;
 
   constructor(public journalService : JournalService,public router : ActivatedRoute){
 
+  }
+
+  showYourArticle(){
+    this.hide ? this.hide = false : this.hide = true;
   }
  
   ngOnInit(){

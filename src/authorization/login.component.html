@@ -1,10 +1,24 @@
-<form>
-<div class="main-form">
-  <i class="logo"></i>
-  <input type="text" placeholder="მომხმარებლის სახელი" name="username" [(ngModel)]="user.Username" value="">
-  <input type="password" placeholder="პაროლი" value="" name="password" [(ngModel)]="user.Password" >
-  <button type="submit" class="btn btn-success pull-right" value="Sign in" (click)="login()">შესვლა</button>
-  <div>
-  </div>
+
+<div class="container" style="height:100%; ;">
+  
+  <h2>სისტემაში შესვლა<small></small></h2>
+  
+  <form style="padding-left: 93px;">
+    
+    <div class="group">      
+      <input type="text" required name="username" [(ngModel)]="user.Username" >
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>სახელი</label>
+    </div>
+      
+    <div class="group">      
+      <input type="password" required name="password" [(ngModel)]="user.Password">
+      <span class="highlight"></span>
+      <span class="bar"></span>
+      <label>პაროლი</label>
+    </div>
+      <button type="submit" class="btn btn-success pull-right" value="Sign in" (click)="login()">შესვლა</button>
+  </form>
+      
 </div>
-</form>

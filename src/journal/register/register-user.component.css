@@ -9,9 +9,9 @@
 }
 body{
   background: url(http://i.imgur.com/MQB99sg.jpg) #a9b89e;
-  font-family:Arial;
   font-size:12px;
   color:#C4BCB0;
+  font-family: "ALK Rex Bold", sans-serif;
 }
 input[type="text"],
 input[type="password"]{

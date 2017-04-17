@@ -1,17 +1,4 @@
-/*
- *  Imports
-*/
-@import url(https://fonts.googleapis.com/css?family=Lato:400,300,700,900);
-@import url(https://fonts.googleapis.com/css?family=Roboto+Slab:400,700);
-@import url("https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css");
-/*
- *  Variables
-*/
-/* Single Line truncation */
-/* Multiline truncation */
-/*
- *  Global styles
-*/
+
 html,
 body,
 .main,
@@ -20,9 +7,9 @@ body,
 }
 
 body {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #313131;
-  background: #ecf0f1;
+  background: aliceblue;
+  
 }
 
 .row {
@@ -36,7 +23,7 @@ body,
 p,
 a,
 li {
-  font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-family: "BPG Mrgvlovani Caps", sans-serif;
   font-size: 15px;
 }
 
@@ -167,6 +154,51 @@ a {
   padding-right: 30px;
   list-style: none;
   /* Individual style & artwork */
+}
+
+.tile-cell.tile-button-cell {
+    width: calc(100% * (1/4) - 1px);
+    text-align: center;
+    -ms-flex-item-align: end;
+    align-self: flex-end;
+}
+
+.tile-cell {
+    display: inline-block;
+    margin: 0;
+    padding: 1.3em 0 1.3em 0;
+    vertical-align: top;
+    border-bottom: 1px solid #f0e9e9;
+      font-family: "ALK Rex Bold", sans-serif;
+}
+a.cta-primary:hover {
+    background: orangered;
+    color:white
+    
+}
+.cta-primary, .cta-secondary, .cta-tertiary {
+    margin-bottom: 1rem;
+}
+.tile-cell.tile-button-cell a {
+    display: block;
+        text-decoration: none;
+}
+
+a[href] {
+    word-break: break-word;
+    word-wrap: break-word;
+}
+.cta-primary {
+    -webkit-transition: all 111ms ease-out;
+    transition: all 111ms ease-out;
+    font-family: NexusSans,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 1.25rem;
+    border: 2px solid #007398;
+    line-height: 2.9rem;
+    padding: 0 .84rem!important;
+}
+img {
+  height: 215px;
 }
 .bk-img .bk-wrapper {
   position: relative;

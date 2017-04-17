@@ -5,27 +5,39 @@
         <a [routerLink]="['']"><img style="height:40px; width:50px; margin-left:-5px;" src="https://www.tsu.ge/i/tsu-logo.png"></a>
       </li>
       <li>
+        <div>
         <a [routerLink]="['']">მთავარი</a>
-        <span class='entypo-home'></span>
+         <span style="font-size:20px;margin-top:10px"class="fa fa-home" aria-hidden="true"></span>
+        </div>
+          
       </li>
       <li>
+         <div>
         <a [routerLink]="['register']">რეგისტრაცია</a>
-        <span class='entypo-gauge'></span>
+         <span style="font-size:20px; margin-top:10px;"class="fa fa-user" aria-hidden="true"></span>
+        </div>
       </li>
       <li>
+      <div>
         <a [routerLink]="['login']">შესვლა</a>
-        <span class='entypo-chart-line'></span>
+         <span style="font-size:20px; margin-top:10px;"class="fa fa-sign-in" aria-hidden="true"></span>
+        </div>
       </li>
       <li>
+        <div>
         <a [routerLink]="['journals-and-books']">ჟურნალი</a>
-        <span class='entypo-rocket'></span>
+         <span style="font-size:20px; margin-top:10px;"class="fa fa-book" aria-hidden="true"></span>
+        </div>
       </li>
       <li>
-        <a>ავტორები</a>
-        <span class='entypo-vcard'></span>
+        <div>
+     <a [routerLink]="['authors']">ავტორები</a>
+         <span style="font-size:20px; margin-top:10px;"class="fa fa fa-users" aria-hidden="true"></span>
+        </div>
       </li>
     
     </ul>
+    
   </div>
 </aside>
 <router-outlet></router-outlet>

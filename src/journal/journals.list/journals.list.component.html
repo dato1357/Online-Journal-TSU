@@ -3,7 +3,7 @@
   <div class="main clearfix">
 
     <!-- Header Content -->
-   
+
     <!-- Main Section -->
     <div class="page-container">
 
@@ -14,15 +14,15 @@
       <section id="book_list">
 
         <div class="grid-shuffle">
-          <ul id="grid" class="col-lg-4" >
-            <li *ngFor="let journal of journalList2; let i : index" class="book-item small-12 medium-6 columns" data-groups='["classic"]' data-date-created='1937' 
-            data-title={{journal.Title}} data-color='#fcc278'>
+          <ul id="grid" class="col-lg-12">
+            <li *ngFor="let journal of journalList2; let i : index" class="book-item small-12 medium-6 columns" data-groups='["classic"]'
+              data-date-created='1937' data-title={{journal.Title}} data-color='#fcc278'>
               <div class="bk-img">
                 <div class="bk-wrapper">
                   <div class="bk-book bk-bookdefault">
                     <div class="bk-front">
-                      <div class="bk-cover" [ngStyle]="{'background-image': journal.image}">  <img [src]="journal.image"></div>
-               
+                      <div class="bk-cover" [ngStyle]="{'background-image': journal.image}"> <img [src]="journal.image"></div>
+
                     </div>
                     <div class="bk-back"></div>
                     <div class="bk-left"></div>
@@ -33,7 +33,9 @@
                 <h3 class="book-item_title">{{journal.Title}}</h3>
                 <p class="author">{{journal.Author}} {{journal.publishDate}}</p>
                 <p>{{journal.description}} </p>
-                <a [routerLink]="['details',i.Id]" class="button ">დეტალები</a>
+                <div class="tile-cell tile-button-cell">
+                  <a class="cta-primary" [routerLink]="['details',journal.Id]">პროდუქტის დეტალები</a>
+                </div>
               </div>
           </ul>
         </div>
@@ -43,7 +45,7 @@
     </div>
 
     <!-- Footer Content -->
-    
+
 
   </div>
   <!-- /main -->
