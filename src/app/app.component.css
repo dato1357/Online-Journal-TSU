@@ -11,8 +11,14 @@ a {
   color: #fff;
   overflow: hidden;
   transition: width .3s ease-in-out;
-  box-shadow: 0 0 10px #000;
+    box-shadow: 0 0 10px #fdfdfd;
   z-index: 100;
+}
+img.image {
+     height: 103px;
+    width: 114px;
+    margin-left: -5px;
+    margin-bottom: 12px;
 }
 .sidebar:hover {
   width: 200px;
@@ -26,7 +32,7 @@ a {
   min-height: 50px;
   line-height: 50px;
   position: relative;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid white;
   transition: all .3s ease-in-out;
 }
 .sidebar .main-nav ul li.logo {
@@ -41,7 +47,7 @@ a {
   font-size: 1.5em;
 }
 .sidebar .main-nav ul li.logo + li {
-  border-top: 1px solid #333;
+  border-top: 1px solid white;
 }
 .sidebar .main-nav ul li a {
   display: block;
