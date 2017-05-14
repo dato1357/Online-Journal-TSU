@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import {JournalModule} from '../journal/journal.module';
 import {appRoutes} from 'app/app.routing';
 import {AuthGuard} from '../services/auth.guard';
-
+import { Ng2UploaderModule } from 'ng2-uploader';
 
 @NgModule({
   declarations: [
@@ -20,6 +20,7 @@ import {AuthGuard} from '../services/auth.guard';
     HttpModule,
     JournalModule,
     RouterModule,
+    Ng2UploaderModule,
     RouterModule.forRoot(appRoutes)
   ],
   providers: [AuthGuard],

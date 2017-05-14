@@ -9,19 +9,19 @@
             <div class="col-lg-12 row">
                 <div >
                     <span>დასახელება</span>
-                    <input class="form-control col-lg-4" type="text" id="sm">
+                    <input class="form-control col-lg-4" type="text" id="sm"   name="submissionName" [(ngModel)]="model.SubmissionName">
                 </div>
                 <div >
                     <span>მოკლე დასახელება</span>
-                    <input class="form-control col-lg-4" type="text" id="sm">
+                    <input class="form-control col-lg-4" type="text" id="sm"   name="shortname" [(ngModel)]="model.ShortName">
                 </div>
                 <div >
                     <span>აღწერა</span>
-                    <input class="form-control col-lg-4" type="text" id="sm">
+                    <input class="form-control col-lg-4" type="text" id="sm"   name="description" [(ngModel)]="model.Description">
                 </div>
                 <div >
                     <span>სხვა</span>
-                    <input class="form-control col-lg-4" type="text" id="sm">
+                    <input class="form-control col-lg-4" type="text" id="sm"   name="other" [(ngModel)]="model.Other">
                 </div>
             </div>
         </div>
@@ -37,7 +37,12 @@
             
             <div class="file-upload">
             <div class="image-upload-wrap">
-                <input class="file-upload-input" type='file' (change)="onChange($event);" accept="*.pdf"  />
+                <input class="file-upload-input" type='file' (change)="onChange($event);" accept="*.pdf"  name="file" [(ngModel)]="model.File"/>
+                <input type="file"
+       ngFileSelect
+       (onUpload)="handleUpload($event)"
+       (beforeUpload)="beforeUpload($event)">
+
                 <div class="drag-text">
                 <h3>ფაილის ატვირთვა {{file?.name}}</h3>
                 </div>
