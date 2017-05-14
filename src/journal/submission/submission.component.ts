@@ -1,5 +1,7 @@
+import { ToastsManager } from 'ng2-toastr/ng2-toastr';
+import { Router } from '@angular/router';
 import { SubmissionModel } from './submission.model';
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload/ng2-file-upload';
 
 @Component({
@@ -10,7 +12,10 @@ import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-u
 })
 export class SubmissionComponent implements OnInit {
 
-  constructor() { }
+  constructor(private route : Router,public toastr: ToastsManager,  vcr: ViewContainerRef) {
+         this.toastr.setRootViewContainerRef(vcr);
+      }
+
   model : SubmissionModel = new SubmissionModel();
 
   file: File;
@@ -61,7 +66,10 @@ export class SubmissionComponent implements OnInit {
   save(form){
     this.model.File = this.file
     console.log(this.model);
+    this.toastr.success("სტატია წარმატებით გამოქვეყნდა");
+    this.route.navigateByUrl("/");
   }
+
   
 
 }

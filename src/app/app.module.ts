@@ -8,6 +8,8 @@ import {JournalModule} from '../journal/journal.module';
 import {appRoutes} from 'app/app.routing';
 import {AuthGuard} from '../services/auth.guard';
 import { Ng2UploaderModule } from 'ng2-uploader';
+import { ToastModule, ToastsManager } from 'ng2-toastr/ng2-toastr';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -21,9 +23,12 @@ import { Ng2UploaderModule } from 'ng2-uploader';
     JournalModule,
     RouterModule,
     Ng2UploaderModule,
+    ToastModule,
+    BrowserAnimationsModule, 
+    ToastModule.forRoot(),
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [AuthGuard],
+  providers: [AuthGuard,ToastsManager],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
