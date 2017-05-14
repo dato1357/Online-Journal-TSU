@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppComponent } from './app.component';
 import {JournalModule} from '../journal/journal.module';
 import {appRoutes} from 'app/app.routing';
+import {AuthGuard} from '../services/auth.guard';
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import {appRoutes} from 'app/app.routing';
     RouterModule,
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,5 @@
 <h1>Submit Your Paper</h1>
+<form #form="ngForm">
 <div class="tab-wrap">
 
     <input type="radio" name="tabs" id="tab1" checked>
@@ -29,8 +30,30 @@
         <input type="radio" name="tabs" id="tab2">
         <div class="tab-label-content" id="tab2-content">
             <label for="tab2">ფაილის ატვირთვა</label>
-            <div class="tab-content">TAB 2 -</div>
+            <div class="tab-content">
+
+            
+            <div class="container">
+            
+            <div class="file-upload">
+            <div class="image-upload-wrap">
+                <input class="file-upload-input" type='file' (change)="onChange($event);" accept="*.pdf"  />
+                <div class="drag-text">
+                <h3>ფაილის ატვირთვა {{file?.name}}</h3>
+                </div>
+            </div>
+            <div class="file-upload-content">
+                <div class="image-title-wrap">
+                <button type="button" onclick="removeUpload()" class="remove-image">Remove <span class="image-title">ფაილის ატვირთვა</span></button>
+                </div>
+            </div>
+            </div>
+
+    
+            </div>
         </div>
+        </div>
+        
 
         <input type="radio" name="tabs" id="tab3">
         <div class="tab-label-content" id="tab3-content">
@@ -48,3 +71,7 @@
         <div class="slide"></div>
 
     </div>
+    <div style="float:right; margin-top:400px;" >
+    <button (click)="save(form)" class="btn btn-success" >გამოქვეყნება</button>
+    </div>
+</form>
