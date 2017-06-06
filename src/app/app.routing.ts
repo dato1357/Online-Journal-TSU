@@ -1,3 +1,5 @@
+import { UserProfileComponent } from './../user-profile/user-profile.component';
+import { ArticleComponent } from './../journal/articles/articles.component';
 import { NgModule } from '@angular/core';
 import {Routes }  from '@angular/router';
 import {HomeComponent} from '../journal/home/home.component';
@@ -16,6 +18,8 @@ export const appRoutes: Routes = [
   { path: 'journals-and-books', component: JournalsComponent},
   { path: 'journals-and-books/details/:id', component: JournalDetailsComponent},
   { path: 'journals-and-books/details/:id/:submissionid', component: SubmissionComponent,canActivate : [AuthGuard]},
+  { path: 'user-profile/:username', component: UserProfileComponent,canActivate : [AuthGuard]},
+  { path: 'articles', component: ArticleComponent,canActivate : [AuthGuard]},
   { path: '',   redirectTo: '/', pathMatch: 'full' },
   { path: '**', component: PageNotFoundComponent }
 ];

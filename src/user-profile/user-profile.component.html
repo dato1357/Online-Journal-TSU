@@ -1,0 +1,63 @@
+<div class="background"></div>
+<div class="background2"></div>
+
+<div class="userprofile">
+    <div class="topbar">
+        <div class="topbar__logo">
+        </div>
+        <div class="topbar__title">
+            <h1>{{accountService.user.username}}</h1>
+            <p>თბილის, საქართველო</p>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+    <ul class="infolist">
+        <li>
+            <h3>2</h3>
+            <p>სტატია</p>
+            <div></div>
+        </li>
+        <li>
+            <h3>0</h3>
+            <p>განსახილველი</p>
+            <div></div>
+        </li>
+        <li>
+            <h3>2</h3>
+            <p>განხილული</p>
+        </li>
+    </ul>
+    <div class="content">
+     <table>
+  <caption>გამოქვეყნებლი სტატიები</caption>
+  <thead>
+    <tr>
+      <th scope="col">დასახელება</th>
+      <th scope="col">გამოქვეყნებულია</th>
+      <th scope="col">სტატუსი</th>
+      <th scope="col">ნახვა</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td scope="row">Leonard Hofstadter</td>
+      <td>07/06/2016</td>
+      <td>განახილველი</td>
+      <td>Software Article</td>
+    </tr>
+    <tr>
+      <td scope="row">Sheldon Cooper</td>
+      <td>07/01/2016</td>
+      <td>განხილული</td>
+      <td>scooper@@caltech.edu</td>
+    </tr>
+  </tbody>
+</table>
+    </div>
+    <div style="clear:both"></div>
+    <div class="bottombar">
+        <a [routerLink]="['/journals-and-books/details/8']">
+        ჟურნალზე გადასვლა
+    </a>
+    </div>
+</div>

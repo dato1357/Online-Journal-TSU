@@ -1,21 +1,3 @@
-
-html,
-body,
-.main,
-.main-container {
-  height: 100%;
-}
-
-body {
-  color: #313131;
-  background: aliceblue;
-  
-}
-
-.row {
-  max-width: 1024px;
-}
-
 /*
  *  Typography
 */

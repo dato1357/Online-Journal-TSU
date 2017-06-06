@@ -1,0 +1,362 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Cis.Core.Domain.Contracts;
+using Cis.Core.Domain.Events.ActionEvents.ActionCreated;
+using Cis.Core.Domain.Events.ActionEvents.ActionSigned;
+using Cis.Core.Domain.Events.ActionEvents.ActionUpdated;
+using Cis.Core.Domain.Events.CaseEvents.CaseCreated;
+using Cis.Core.Domain.Events.CaseEvents.CaseDetailsUpdated;
+using Cis.Core.Domain.Events.ObjectEvents.ObjectCreated;
+using Cis.Core.Domain.Events.ObjectEvents.ObjectDeleted;
+using Cis.Core.Domain.Events.ObjectEvents.ObjectUpdated;
+using Cis.Core.Domain.Models.Actions;
+using Cis.Core.Domain.Models.Objects;
+using Cis.Json;
+using Cis.Shared;
+using Cis.Shared.CommandModels;
+using Cis.Shared.Models;
+using Cis.Shared.Utils;
+using Cis.Core.Domain.Events.ObjectEvents.ObjectStatusChanged;
+
+namespace Cis.Core.Domain.Models.Cases
+{
+    public class Case : AggregateRoot<Guid>
+    {
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public string Number { get; set; }
+        public bool IsOld { get; set; }
+        public CaseState State { get; set; }
+        public CaseStatus Status { get; set; }
+        public DateTimeOffset CreateDate { get; set; }
+        public Guid CreateUserId { get; set; }
+
+        /// <summary>
+        /// საქმეში დარეგისტრირებული ობიექტები (არ შეიცავს ობიექტების ველების მონაცემებს)
+        /// </summary>
+        public List<ObjectMetadata> Objects { get; set; } = new List<ObjectMetadata>();
+
+        /// <summary>
+        /// საქმეში დარეგისტრირებული სუბიექტები
+        /// </summary>
+        public List<SubjectBase> Subjects { get; set; }
+
+        /// <summary>
+        /// საქმეში ჩატარებული ყველა ქმედების მონაცემები (არ შეიცავს ქმედებების ველების მონაცემებს)
+        /// (მოიცავს საქმეზე, ობიექტზე და ქმედებაზე ჩატარებულ ქმედებებსაც)
+        /// </summary>
+        public List<ActionMetadata> Actions { get; set; } = new List<ActionMetadata>();
+
+        /// <summary>
+        /// საქმეში დარეგისტრირებული დანაშაულები
+        /// </summary>
+        public List<Crime> Crimes { get; set; }
+
+        /// <summary>
+        /// გარე ფაილები
+        /// </summary>
+        public List<ExternalFile> ExternalFiles { get; set; }
+
+        private ICaseRepository _repository;
+
+
+        public Case()
+        {
+            Subjects = new List<SubjectBase>();
+            ExternalFiles = new List<ExternalFile>();
+        }
+
+        public void Initialize(ICaseRepository repository)
+        {
+            _repository = repository;
+        }
+
+        #region Case
+
+        public static Case CreateNew(ICaseRepository repository, string number, string title, string description, Guid userId)
+        {
+            return CreateInternal(repository, number, title, description, userId, false);
+        }
+
+        public static Case CreateOld(ICaseRepository repository, string number, string title, string description, Guid userId)
+        {
+            return CreateInternal(repository, number, title, description, userId, true);
+        }
+
+        private static Case CreateInternal(ICaseRepository repository, string number, string name, string description, Guid userId, bool isOld)
+        {
+            if (!number.StartsWith("P")) throw new DomainValidationException("Pre საქმის ნომერი არ იწყება P სიმბოლოთი.");
+            if (number.Length != 11) throw new DomainValidationException("საქმის ნომერი უნდა შეიცავდეს 11 სიმბოლოს.");
+            if (string.IsNullOrWhiteSpace(number)) throw new DomainValidationException("საქმის ნომერი ცარიელია.");
+            if (string.IsNullOrWhiteSpace(name)) throw new DomainValidationException("საქმის დასახელება ცარიელია.");
+            if (string.IsNullOrWhiteSpace(description)) throw new DomainValidationException("დანაშაულის გარემოებები ცარიელია.");
+
+            var @case = new Case()
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Description = description,
+                Number = number,
+                IsOld = isOld,
+                CreateDate = DateTimeUtils.Now,
+                State = CaseState.Preliminary,
+                Status = CaseStatus.Active,
+                CreateUserId = userId
+            };
+            @case.Initialize(repository);
+            @case.HandleEvent(new CaseCreatedEvent(@case));
+            repository.CreateCase(@case);
+            return @case;
+        }
+
+        public Case GenerateNumber()
+        {
+            // TODO: Generate case number using real algorithm
+            Number = "0123456789";
+            return this;
+        }
+
+        #endregion
+
+
+        public Case RegisterSubject(SubjectBase subjectBase)
+        {
+            Subjects.Add(subjectBase);
+            return this;
+        }
+
+        public Case ChangeStatus(CaseStatus newStatus)
+        {
+            Status = newStatus;
+            return this;
+        }
+
+        public Case ChangeState(CaseState newState)
+        {
+            State = newState;
+            return this;
+        }
+
+        #region Actions
+
+        public void CreateAction(CreateActionCommandModel data, Guid currentUserId)
+        {
+            var actionTypeName = $"Cis.Core.Domain.Models.Actions.{data.ActionType}Model.{data.ActionType}";
+            var action = (ActionBase)JsonConvert.Deserialize(data.Json, Type.GetType(actionTypeName));
+            action.Metadata = new ActionMetadata(data, this, action.Id, currentUserId);
+
+            action.Validate();
+
+            var actionExists = Actions.Any(a => a.Id == action.Id);
+            if (actionExists)
+            {
+                throw new DomainException("ქმედება უკვე დარეგისტრირდა.");
+            }
+            if (data.TargetType == ActionTargetType.Case && data.TargetId != data.CaseId)
+            {
+                throw new DomainException("ქმედების რეგისტრაცია შეუძლებელია.");
+            }
+
+            if (data.TargetType == ActionTargetType.Object)
+            {
+                var objectExists = Objects.Any(i => i.Id == data.TargetId);
+                if (!objectExists)
+                {
+                    throw new DomainException("ქმედების რეგისტრაცია შეუძლებელია. ობიექტი ვერ მოიძებნა.");
+                }
+            }
+            else if (data.TargetType == ActionTargetType.Action)
+            {
+                var baseAction = Actions.FirstOrDefault(a => a.Id == data.TargetId);
+                if (baseAction == null)
+                {
+                    throw new DomainException("ქმედების რეგისტრაცია შეუძლებელია.");
+                }
+            }
+
+            HandleEvent(new ActionCreatedEvent(data.CaseId, action.Id, data));
+            Actions.Add(action.Metadata);
+            _repository.CreateAction(action);
+        }
+
+        public void UpdateAction(UpdateActionCommandModel model, Guid userId)
+        {
+            var originalMetadata = Actions.FirstOrDefault(i => i.Id == model.ActionId);
+            if (originalMetadata == null)
+            {
+                throw new DomainException("ქმედება ვერ მოიძებნა.");
+            }
+
+            var actionTypeName = $"Cis.Core.Domain.Models.Actions.{model.ActionType}Model.{model.ActionType}";
+            var action = (ActionBase)JsonConvert.Deserialize(model.Json, Type.GetType(actionTypeName));
+
+            if (action.Metadata.CreateUserId == Guid.Empty ||
+                action.Metadata.TargetId == Guid.Empty ||
+                action.Metadata.TargetType == ActionTargetType.None)
+            {
+                throw new DomainException("ქმედების განახლება შეუძლებელია.");
+            }
+
+            if (action.Metadata.TargetId != originalMetadata.TargetId ||
+               action.Metadata.TargetType != originalMetadata.TargetType)
+            {
+                throw new DomainException("ქმედების განახლება შეუძლებელია.");
+            }
+            action.Metadata.Case = this;
+            action.Validate();
+
+            var originalAction = _repository.GetActionById(model.ActionId);
+            originalAction.Update(action);
+            originalAction.Metadata.Signed = false;
+
+            HandleEvent(new ActionUpdatedEvent(model.CaseId, model));
+
+            _repository.UpdateAction(originalAction);
+        }
+
+        public void SignAction(UpdateActionCommandModel model, Guid signUserId)
+        {
+            var actionTypeName = $"Cis.Core.Domain.Models.Actions.{model.ActionType}Model.{model.ActionType}";
+            var action = (ActionBase)JsonConvert.Deserialize(model.Json, Type.GetType(actionTypeName));
+
+            if (action.Metadata.CreateUserId == Guid.Empty ||
+                action.Metadata.TargetId == Guid.Empty ||
+                action.Metadata.TargetType == ActionTargetType.None)
+            {
+                throw new DomainException("ქმედების ხელმოწერა შეუძლებელია.");
+            }
+
+            var originalAction = _repository.GetActionById(model.ActionId);
+
+            if (action.Metadata.TargetId != originalAction.Metadata.TargetId ||
+              action.Metadata.TargetType != originalAction.Metadata.TargetType)
+            {
+                throw new DomainException("ქმედების ხელმოწერა შეუძლებელია.");
+            }
+
+            if (originalAction.Metadata.Signed)
+            {
+                throw new DomainException("ქმედება უკვე ხელმოწერილია.");
+            }
+
+            var signDate = DateTimeUtils.Now;
+            originalAction.Metadata.Signed = true;
+            originalAction.Metadata.SignDate = signDate;
+            originalAction.Metadata.SignUserId = signUserId;
+
+            HandleEvent(new ActionSignedEvent(model.CaseId, signUserId, signDate, model));
+            originalAction.Update(action);
+            _repository.SignAction(originalAction);
+        }
+
+        #endregion
+
+        #region Objects
+
+        public ObjectBase CreateObject(CreateObjectCommandModel model, Guid currentUserId)
+        {
+            var objectTypeName = $"Cis.Core.Domain.Models.Objects.{model.ObjectType}";
+            var @object = (ObjectBase)JsonConvert.Deserialize(model.Json, Type.GetType(objectTypeName));
+            @object.Metadata = new ObjectMetadata(@object.Id, model.CaseId, model.ObjectType, @object.Name, false, DateTimeUtils.Now, currentUserId, this);
+
+            @object.Validate();
+
+            var objectExists = Objects.Any(a => a.Id == @object.Id);
+            if (objectExists)
+            {
+                throw new DomainException("ობიექტი უკვე დარეგისტრირდა.");
+            }
+
+            Objects.Add(@object.Metadata);
+            HandleEvent(new ObjectCreatedEvent(model.CaseId, model));
+
+            _repository.CreateObject(@object);
+            return @object;
+        }
+
+        public void UpdateObject(UpdateObjectCommandModel model, Guid currentUserId)
+        {
+            var original = _repository.GetObjectById(model.ObjectId);
+            if (original == null) throw new DomainException("ობიექტი ვერ მოიძებნა.");
+
+            var objectTypeName = $"Cis.Core.Domain.Models.Objects.{model.ObjectType}";
+            var @object = (ObjectBase)JsonConvert.Deserialize(model.Json, Type.GetType(objectTypeName));
+            @object.Metadata = original.Metadata;
+            @object.Metadata.Name = @object.Name;
+            @object.Validate();
+            original.Update(@object);
+            HandleEvent(new ObjectUpdatedEvent(model.CaseId, model));
+            _repository.UpdateObject(original);
+        }
+
+        public bool IsObjectDeletable(Guid objectId)
+        {
+            var @object = Objects.FirstOrDefault(e => e.Id == objectId);
+            if (@object == null) throw new DomainException("ობიექტი ვერ მოიძებნა");
+
+            return Actions.Any(i => i.TargetId == objectId && i.Signed);
+        }
+
+        public void DeleteObject(Guid objectId)
+        {
+            var @objectMetadata = Objects.FirstOrDefault(e => e.Id == objectId);
+            if (@objectMetadata == null) throw new DomainException("ობიექტი ვერ მოიძებნა");
+
+            var @object = _repository.GetObjectById(objectId);
+
+            @object.Delete();
+            HandleEvent(new ObjectDeletedEvent(Id, objectId));
+
+            _repository.UpdateObject(@object);
+        }
+
+        public ObjectBase ChangeObjectStatus(ChangeObjectStatusCommandModel model, Guid currentUserId)
+        {
+            var originalObject = _repository.GetObjectById(model.ObjectId);
+            if (originalObject == null) throw new DomainException("ობიექტი ვერ მოიძებნა.");
+
+            var objectTypeName = $"Cis.Core.Domain.Models.Objects.{model.ObjectType}";
+
+            var newObject = (ObjectBase)JsonConvert.Deserialize(model.Json, Type.GetType(objectTypeName));
+            newObject.Metadata = new ObjectMetadata(model.ObjectId, model.CaseId, model.ObjectType, newObject.Name, false, DateTimeUtils.Now, currentUserId, this);
+            newObject.Validate();
+
+            _repository.UpdateObject(newObject);
+            HandleEvent(new ObjectStatusChangedEvent(model.CaseId, model.ObjectId, model.ObjectType));
+            return newObject;
+
+
+        }
+
+
+
+        #endregion
+
+
+        public void UpdateDetails(string name, string description)
+        {
+            if (string.IsNullOrWhiteSpace(name)) throw new DomainValidationException("საქმის დასახელება ცარიელია.");
+            if (string.IsNullOrWhiteSpace(description)) throw new DomainValidationException("დანაშაულის გარემოებები ცარიელია.");
+
+            Name = name;
+            Description = description;
+
+            HandleEvent(new CaseDetailsUpdatedEvent(this));
+            _repository.UpdateCaseDetails(this);
+        }
+
+        public void AddExternalFile(ExternalFile externalFile)
+        {
+            if (string.IsNullOrWhiteSpace(externalFile.FileDescription)) throw new DomainValidationException("ფაილის აღწერა ცარიელია.");
+            if (ExternalFiles == null)
+            {
+                ExternalFiles = new List<ExternalFile>();
+            }
+
+            ExternalFiles.Add(externalFile);
+        }
+
+
+    }
+}

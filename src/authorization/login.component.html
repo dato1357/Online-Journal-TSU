@@ -3,7 +3,7 @@
   
   <h2>სისტემაში შესვლა<small></small></h2>
   
-  <form style="padding-left: 93px;">
+  <form #form = "ngForm" style="padding-left: 93px;">
     
     <div class="group">      
       <input type="text" required name="username" [(ngModel)]="user.Username" >
@@ -18,7 +18,7 @@
       <span class="bar"></span>
       <label>პაროლი</label>
     </div>
-      <button type="submit" class="btn btn-success pull-right" value="Sign in" (click)="login()">შესვლა</button>
+      <button type="submit" class="btn btn-success pull-right" value="Sign in" (click)="login(form)">შესვლა</button>
   </form>
       
 </div>

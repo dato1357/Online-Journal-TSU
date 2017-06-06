@@ -4,40 +4,47 @@
       <li class='logo'>
         <a [routerLink]="['']"><img class="image" src="https://www.tsu.ge/i/tsu-logo.png"></a>
       </li>
+
+      <li *ngIf="authService.isLoggedIn()">
+        <a [routerLink]="['user-profile',authService.user.username]">გამარჯობა,{{authService.user.username}}</a>
+        <span style="font-size:20px; margin-top:10px;" class="fa fa fa-user-circle" aria-hidden="true"></span>
+      </li>
       <li>
         <div>
-        <a [routerLink]="['']">მთავარი</a>
-         <span style="font-size:20px;margin-top:10px"class="fa fa-home" aria-hidden="true"></span>
-        </div>
-          
-      </li>
-      <li>
-         <div>
-        <a [routerLink]="['register']">რეგისტრაცია</a>
-         <span style="font-size:20px; margin-top:10px;"class="fa fa-user" aria-hidden="true"></span>
-        </div>
-      </li>
-      <li>
-      <div>
-        <a [routerLink]="['login']">შესვლა</a>
-         <span style="font-size:20px; margin-top:10px;"class="fa fa-sign-in" aria-hidden="true"></span>
+          <a [routerLink]="['']">მთავარი</a>
+          <span style="font-size:20px;margin-top:10px" class="fa fa-home" aria-hidden="true"></span>
         </div>
       </li>
       <li>
         <div>
-        <a [routerLink]="['journals-and-books']">ჟურნალი</a>
-         <span style="font-size:20px; margin-top:10px;"class="fa fa-book" aria-hidden="true"></span>
+          <a [routerLink]="['journals-and-books']">ჟურნალი</a>
+          <span style="font-size:20px; margin-top:10px;" class="fa fa-book" aria-hidden="true"></span>
         </div>
       </li>
       <li>
         <div>
-     <a [routerLink]="['authors']">ავტორები</a>
-         <span style="font-size:20px; margin-top:10px;"class="fa fa fa-users" aria-hidden="true"></span>
+          <a [routerLink]="['authors']">ავტორები</a>
+          <span style="font-size:20px; margin-top:10px;" class="fa fa fa-users" aria-hidden="true"></span>
         </div>
       </li>
-    
+      <li *ngIf="authService.isLoggedIn()">
+        <span style="font-size:20px; margin-top:10px;" class="fa fa fa-sign-out" aria-hidden="true"></span>
+        <a (click)="logOut()">გასვლა</a>
+      </li>
+      <li>
+        <div *ngIf="!authService.isLoggedIn()">
+          <a [routerLink]="['register']">რეგისტრაცია</a>
+          <span style="font-size:20px; margin-top:10px;" class="fa fa-user" aria-hidden="true"></span>
+        </div>
+      </li>
+      <li>
+        <div *ngIf="!authService.isLoggedIn()">
+          <a [routerLink]="['login']">შესვლა</a>
+          <span style="font-size:20px; margin-top:10px;" class="fa fa-sign-in" aria-hidden="true"></span>
+        </div>
+      </li>
     </ul>
-    
+
   </div>
 </aside>
 <router-outlet></router-outlet>
